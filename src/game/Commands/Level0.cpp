@@ -316,3 +316,26 @@ bool ChatHandler::HandleWhisperRestrictionCommand(char* args)
     PSendSysMessage("Whisper restriction is %s", value ? "ON" : "OFF");
     return false;
 }
+
+bool ChatHandler::HandleMailRestrictionCommand(char* args)
+{
+	if (!*args)
+	{
+		PSendSysMessage("Mail restriction is %s", GetSession()->GetPlayer()->isEnabledMailRestriction() ? "ON" : "OFF");
+		return true;
+	}
+
+	bool value;
+	if (!ExtractOnOff(&args, value))
+	{
+		SendSysMessage(LANG_USE_BOL);
+		SetSentErrorMessage(true);
+		return false;
+	}
+
+	GetSession()->GetPlayer()->setMailRestriction(value);
+	PSendSysMessage("Whisper restriction is %s", value ? "ON" : "OFF");
+
+
+	return false;
+}

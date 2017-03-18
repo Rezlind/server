@@ -929,7 +929,9 @@ class MANGOS_DLL_SPEC Player final: public Unit
 
         bool isAllowedWhisperFrom(ObjectGuid guid);
         bool isEnabledWhisperRestriction() const { return m_ExtraFlags & PLAYER_EXTRA_WHISP_RESTRICTION; }
+		bool isEnabledMailRestriction() const { return m_ExtraFlags & PLAYER_EXTRA_MAIL_RESTRICTION;  }
         void setWhisperRestriction(bool on) { if (on) m_ExtraFlags |= PLAYER_EXTRA_WHISP_RESTRICTION; else m_ExtraFlags &= ~PLAYER_EXTRA_WHISP_RESTRICTION; }
+		void setMailRestriction(bool on) { if (on) m_ExtraFlags |= PLAYER_EXTRA_MAIL_RESTRICTION; else m_ExtraFlags &= ~PLAYER_EXTRA_MAIL_RESTRICTION; }
 
         bool IsAcceptWhispers() const { return m_ExtraFlags & PLAYER_EXTRA_ACCEPT_WHISPERS; }
         void SetAcceptWhispers(bool on) { if(on) m_ExtraFlags |= PLAYER_EXTRA_ACCEPT_WHISPERS; else m_ExtraFlags &= ~PLAYER_EXTRA_ACCEPT_WHISPERS; }

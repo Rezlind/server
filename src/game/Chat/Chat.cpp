@@ -1028,6 +1028,7 @@ ChatCommand * ChatHandler::getCommandTable()
         { NODE, "setskill",       SEC_ADMINISTRATOR,  false, &ChatHandler::HandleSetSkillCommand,            "", nullptr },
         { MSTR, "whispers",       SEC_MODERATOR,      false, &ChatHandler::HandleWhispersCommand,            "", nullptr },
         { MSTR, "wr",             SEC_PLAYER,         false, &ChatHandler::HandleWhisperRestrictionCommand,  "", nullptr },
+		{ MSTR, "mr",             SEC_PLAYER,        false, &ChatHandler::HandleMailRestrictionCommand,	"", nullptr },
         { MSTR, "pinfo",          SEC_GAMEMASTER,     true,  &ChatHandler::HandlePInfoCommand,               "", nullptr },
         { MSTR, "pbcast",         SEC_ADMINISTRATOR,  true,  &ChatHandler::HandlePBCastStatsCommand,         "", pbcastCommandTable },
         { NODE, "addons",         SEC_ADMINISTRATOR,  false, &ChatHandler::HandleListAddonsCommand,          "", nullptr },

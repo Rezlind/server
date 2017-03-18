@@ -173,6 +173,7 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
 
     if (normalizePlayerName(req->receiverName))
         req->receiver = sObjectMgr.GetPlayerGuidByName(req->receiverName);
+	//This is the entry point for the if conditional 
 
     if (!req->receiver)
     {
@@ -182,7 +183,6 @@ void WorldSession::HandleSendMail(WorldPacket & recv_data)
         delete req;
         return;
     }
-
     DETAIL_LOG("%s is sending mail to %s with subject %s and body %s includes %u items, %u copper and %u COD copper with unk1 = %u, unk2 = %u",
                pl->GetGuidStr().c_str(), req->receiverName.c_str(), req->subject.c_str(), req->body.c_str(), req->itemGuid ? 1 : 0, req->money, req->COD, unk1, unk2);
 
