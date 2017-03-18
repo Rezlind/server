@@ -411,10 +411,23 @@ bool AuthSocket::_HandleLogonChallenge()
         ///- Get the account details from the account table
         // No SQL injection (escaped user name)
 
-        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security FROM account WHERE username = '%s'",_safelogin.c_str ());
+        result = LoginDatabase.PQuery("SELECT sha_pass_hash,id,locked,last_ip,v,s,security,email_verif FROM account WHERE username = '%s'",_safelogin.c_str ());
         if (result)
         {
             Field* fields = result->Fetch();
+
+			// Prevent login if the user's email address has not been verified
+			bool requireVerification = sConfig.GetBoolDefault("ReqEmailVerification", false);
+			bool verified = (*result)[7].GetBool();
+
+			if (requireVerification && !verified)
+			{
+				BASIC_LOG("[AuthChallenge] Account's email address requires email verification - rejecting login");
+				pkt << (uint8)WOW_FAIL_UNKNOWN_ACCOUNT;
+				send((char const*)pkt.contents(), pkt.size());
+				return true;
+			}
+
             ///- If the IP is 'locked', check that the player comes indeed from the correct IP address
             bool locked = false;
             lockFlags = (LockFlag)(*result)[2].GetUInt32();
@@ -811,7 +824,7 @@ bool AuthSocket::_HandleLogonProof()
                     if(WrongPassBanType)
                     {
                         uint32 acc_id = fields[0].GetUInt32();
-                        LoginDatabase.PExecute("INSERT INTO account_banned VALUES ('%u',UNIX_TIMESTAMP(),UNIX_TIMESTAMP()+'%u','MaNGOS realmd','Failed login autoban',1)",
+                        LoginDatabase.PExecute("INSERT INTO account_banned VALUES ('%u',UNIX_TIMESTAMP(),UNIX_TIMESTAMP()+'%u','MaNGOS realmd','Failed login autoban',1,1,0)",
                             acc_id, WrongPassBanTime);
                         BASIC_LOG("[AuthChallenge] account %s got banned for '%u' seconds because it failed to authenticate '%u' times",
                             _login.c_str(), WrongPassBanTime, failed_logins);
